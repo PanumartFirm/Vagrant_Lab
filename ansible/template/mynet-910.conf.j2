@@ -1,0 +1,14 @@
+upstream appset2 {
+ server web-01.mynet-910.com;
+ server web-02.mynet-910.com;
+}
+
+server {
+  listen 80;
+  server_name mynet-910.com www.mynet-910.com;
+  proxy_set_header Host $http_host;
+  access_log syslog:server=192.168.100.11:514,facility=local7,tag=nginx_mynet,severity=info; 
+  location / {
+    proxy_pass http://appset2;
+  }
+}

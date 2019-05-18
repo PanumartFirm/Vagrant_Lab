@@ -1,0 +1,20 @@
+$TTL    604800
+@       IN      SOA     nyc3.mynet-910.com. root.mynet-910.com. (
+         2019021801     ; Serial
+             604800     ; Refresh
+              86400     ; Retry
+            2419200     ; Expire
+             604800 )   ; Negative Cache TTL
+;
+; name servers - NS records
+     IN      NS      ns1.mynet-910.com.
+
+; name servers - A records
+ns1.mynet-910.com.          IN      A       192.168.100.11
+
+; PTR Records
+11                          IN      PTR     ansible-mgn.mynet-910.com
+80                          IN      PTR     server-01.mynet-910.com
+81                          IN      PTR     server-02.mynet-910.com
+82                          IN      PTR     server-03.mynet-910.com
+70                          IN      PTR     server-04.mynet-910.com

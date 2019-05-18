@@ -1,0 +1,57 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+  tasks: 
+
+  - name: Enable rsyslog
+    service:
+     name:  rsyslog
+     enabled: yes
+
+  - name: start  rsyslog
+    service:
+     name:  rsyslog
+     state: started
+
+  - name: Copy resolv file nameserver in Mgn 
+    template:
+      src: template/rsyslog.conf.j2
+      dest: /etc/rsyslog.conf
+      owner: root
+      group: root
+      mode: "0644"
+    when: ansible_connection == 'local'
+
+  - name: Copy resolv file nameserver in 1-4
+    lineinfile:
+      path: /etc/rsyslog.conf
+      regexp: '#*.* @@remote-host:514'
+      line:  '*.* @192.168.100.11:514'
+      backup: yes
+
+  - name: Restart nginx
+    service:
+     name: rsyslog 
+     state: restarted 
+     
+  - name: Open firewalld
+    firewalld:
+       port: '{{ item }}'
+       permanent: yes
+       state: enabled
+    loop:
+        - "514/udp" 
+        - "514/tcp" 
+
+  - name: Restart firewall
+    service:
+     name: firewalld
+     state: restarted       
+    
+  
+  
+  
+
+     
+    
